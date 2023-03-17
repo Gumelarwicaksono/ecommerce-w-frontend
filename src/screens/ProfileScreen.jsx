@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { api } from '../api';
 import { Store } from '../Store';
 import { getError } from '../utils';
+import LodingBox from '../components/LodingBox';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -33,6 +34,11 @@ const ProfileScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
     try {
       const { data } = await axios.put(
         `${api}/api/users/profile`,
@@ -93,7 +99,7 @@ const ProfileScreen = () => {
         </div>
         <div className="mb-3">
           <button type="submit" className="btn btn-primary">
-            Update
+            {loadingUpdate ? 'Update' : <LodingBox />}
           </button>
         </div>
       </form>
