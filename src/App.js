@@ -24,7 +24,10 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
-    window.location.href = '/login';
+    // window.location.href = '/login';
+
+    window.history.pushState(null, null, '/login');
+    window.location.reload();
   };
   return (
     <BrowserRouter>
