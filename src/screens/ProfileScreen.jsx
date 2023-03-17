@@ -99,7 +99,7 @@ const ProfileScreen = () => {
         </div>
         <div className="mb-3">
           <button type="submit" className="btn btn-primary">
-            {loadingUpdate ? 'Update' : <LodingBox />}
+            {loadingUpdate ? <LodingBox /> : 'Update'}
           </button>
         </div>
       </form>
