@@ -14,6 +14,11 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import SearchBox from './components/SearchBox';
+import SearchScreen from './screens/SearchScreen';
+import ProtectedRoute from './components/ProtectedRoute';
+import DasboardScreen from './screens/DasboardScreen';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -24,10 +29,7 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
-    // window.location.href = '/login';
-
-    window.history.pushState(null, null, '/login');
-    window.location.reload();
+    window.location.href = '/';
   };
   return (
     <BrowserRouter>
@@ -43,8 +45,14 @@ function App() {
               <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
               </button>
+
               {/* sub navbar */}
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                {/* =========== search ================ */}
+                <div>
+                  <SearchBox />
+                </div>
+                {/* ========================== */}
                 <div className="nav ms-auto">
                   <Link className="nav-item position-relative mt-2 " to="/cart">
                     <i className="fas fa-cart-plus text-primary"></i>
@@ -70,7 +78,7 @@ function App() {
                           <hr className="dropdown-divider" />
                         </li>
                         <li>
-                          <Link className="dropdown-item" to="#logout" onClick={logoutHandler}>
+                          <Link className="dropdown-item" to="/" onClick={logoutHandler}>
                             logout
                           </Link>
                         </li>
@@ -80,6 +88,35 @@ function App() {
                     <Link className="nav-link" to="/login">
                       login
                     </Link>
+                  )}
+                  {userInfo && userInfo.isAdmin && (
+                    <li className="nav-item dropdown">
+                      <a className="nav-link dropdown-toggle" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Admin
+                      </a>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <Link className="dropdown-item" to="/admin/dashboard">
+                            Dasboart
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/productlist">
+                            Products
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/orderlist">
+                            Order
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/userlist">
+                            Users
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
                   )}
                 </div>
               </div>
@@ -92,15 +129,49 @@ function App() {
             <Routes>
               <Route path="/product/:slug" element={<ProductScreen />} />
               <Route path="/cart" element={<CartScreen />} />
+              <Route path="/search" element={<SearchScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
-              <Route path="/profile" element={<ProfileScreen />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfileScreen />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/" element={<HomeScreen />} />
               <Route path="/shipping" element={<ShippingAdressScreen />} />
               <Route path="/payment" element={<PaymentMetodScreen />} />
+              {/* admin route */}
+
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <DasboardScreen />
+                  </AdminRoute>
+                }
+              />
+
+              {/* =================== */}
               <Route path="/placeorder" element={<PlaceOrderScreen />} />
-              <Route path="/order/:id" element={<OrderScreen />} />
-              <Route path="/orderhistory" element={<OrderHistoryScreen />} />
+              <Route
+                path="/order/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrderScreen />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/orderhistory"
+                element={
+                  <ProtectedRoute>
+                    <OrderHistoryScreen />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </div>
         </main>
