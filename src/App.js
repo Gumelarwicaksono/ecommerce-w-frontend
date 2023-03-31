@@ -146,7 +146,7 @@ function App() {
               {/* admin route */}
 
               <Route
-                path="/admin/dashboard"
+                path="/admin/dashboard/*"
                 element={
                   <AdminRoute>
                     <DasboardScreen />
