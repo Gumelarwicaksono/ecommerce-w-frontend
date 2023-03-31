@@ -5,6 +5,7 @@ import { Store } from '../Store';
 const AdminRoute = (props) => {
   const { state } = useContext(Store);
   const { userInfo } = state;
+
   return userInfo && userInfo.isAdmin ? props.children : <Navigate to={`/login`} />;
 };
 
